@@ -1225,9 +1225,11 @@ bool CFloatingDockContainer::isMaximized() const
 //============================================================================
 void CFloatingDockContainer::show()
 {
-	// Prevent this window from showing in the taskbar and pager (alt+tab)
-	internal::xcb_add_prop(true, winId(), "_NET_WM_STATE", "_NET_WM_STATE_SKIP_TASKBAR");
-	internal::xcb_add_prop(true, winId(), "_NET_WM_STATE", "_NET_WM_STATE_SKIP_PAGER");
+	if(QGuiApplication::platformName() == QLatin1String("xcb")) {
+		// Prevent this window from showing in the taskbar and pager (alt+tab)
+		internal::xcb_add_prop(true, winId(), "_NET_WM_STATE", "_NET_WM_STATE_SKIP_TASKBAR");
+		internal::xcb_add_prop(true, winId(), "_NET_WM_STATE", "_NET_WM_STATE_SKIP_PAGER");
+	}
 	Super::show();
 }
 
